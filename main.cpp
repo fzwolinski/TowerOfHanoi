@@ -9,6 +9,7 @@ void draw_map();
 int num_of_disks = 3;
 int arr[3][7];
 
+
 int main(int argc, char** argv)
 {
     check_args(argc, argv);
@@ -48,17 +49,28 @@ void create_map(int disks_count) {
         }
     }
 }
-
 void draw_map() {
     int how_many_spaces = num_of_disks;
+    int next;
+    int next_should_have;
+
     for(int i = 0; i < num_of_disks; i++) {
         for(int j = 0;j < 3; j++) {
+            next = arr[j][i];
+            next_should_have = (i+1)*2;
+            if (next_should_have != next ) {
+                std::cout << std::string((next_should_have-next)/2, ' ');
+            }
+
             std::cout << std::string(how_many_spaces, ' ');
+
             for(int b = 0; b < arr[j][i];b++)
                 std::cout << "#";
             if (arr[j][i] == 0)     // In case there is no disk at this place
                 std::cout << "\t";
-            std::cout << "\t";
+
+            std::cout << " \t";
+
         }
         how_many_spaces = how_many_spaces != 0 ? how_many_spaces-1 : 0;
         std::cout << std::endl;
