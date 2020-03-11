@@ -1,18 +1,24 @@
 #include <iostream>
 #include <cstdlib>
 #include <string>
+#include <vector>
+#include <algorithm>
+
 
 void check_args(int arg_count, char *a[]);
 void create_map(int disks_count);
 void draw_map();
 void check_available_moves();
 void move_disk(int from, int to, int num_of_disks_tower_from, int num_of_disks_tower_to);
+void choose_option();
+void clear_option_arr();
 
 const int default_num_of_disks = 5;
 int num_of_disks = default_num_of_disks;
 
 int num_of_disks_on_each_tower[3] = { default_num_of_disks, 0, 0 };
 int arr[3][7];
+std::string option[6];
 
 int main(int argc, char** argv)
 {
@@ -20,6 +26,7 @@ int main(int argc, char** argv)
     create_map(num_of_disks);
     draw_map();
     check_available_moves();
+    choose_option();
 
     return 0;
 }
@@ -90,32 +97,36 @@ void check_available_moves(){
     int top_el_tower_2 = arr[1][num_of_disks - num_of_disks_on_each_tower[1]];
     int top_el_tower_3 = arr[2][num_of_disks - num_of_disks_on_each_tower[2]];
 
+    std::cout << "\n";
+
     // Check moves for Tower 1
     if (top_el_tower_1 > top_el_tower_2) {
-        move_disk(1, 2, num_of_disks_on_each_tower[0], num_of_disks_on_each_tower[1]);
-        //std::cout << "1 -> 2\n";
+        std::cout << "1) 1 -> 2\n";
+        option[1] = "12";
     }
     if (top_el_tower_1 > top_el_tower_3) {
-        //std::cout << "1 -> 3\n";
-        move_disk(1, 3, num_of_disks_on_each_tower[0], num_of_disks_on_each_tower[2]);
-
+        std::cout << "2) 1 -> 3\n";
+        option[2] = "13";
     }
 
     // Check moves for Tower 2
     if (top_el_tower_2 > top_el_tower_1) {
-        std::cout << "2 -> 1\n";
+        std::cout << "3) 2 -> 1\n";
+        option[3] = "21";
     }
     if (top_el_tower_2 > top_el_tower_3) {
-        std::cout << "2 -> 3\n";
+        std::cout << "4) 2 -> 3\n";
+        option[4] = "23";
     }
 
     // Check moves for Tower 3
     if (top_el_tower_3 > top_el_tower_1) {
-        std::cout << "3 -> 1\n";
+        std::cout << "5) 3 -> 1\n";
+        option[5] = "31";
     }
     if (top_el_tower_3 > top_el_tower_2) {
-        //move_disk(3, 2, num_of_disks_on_each_tower[2], num_of_disks_on_each_tower[1]);
-        std::cout << "3 -> 2\n";
+        std::cout << "6) 3 -> 2\n";
+        option[6] = "32";
     }
 }
 
@@ -131,3 +142,26 @@ void move_disk(int from, int to, int num_of_disks_tower_from, int num_of_disks_t
 
     //check_available_moves();
 }
+
+void choose_option() {
+    char key;
+
+    do {
+        std::cout << "\nOption: ";
+        std::cin >> key;
+    } while((option[key - '0'] == ""));
+
+    int from = option[key - '0'][0] - '0';
+    int to = option[key - '0'][1] - '0';
+    move_disk(from, to, num_of_disks_on_each_tower[from-1], num_of_disks_on_each_tower[to-1]);
+    clear_option_arr();
+}
+
+void clear_option_arr() {
+    for(int i = 0; i < 7; i++) {
+        option[i].clear();
+    }
+}
+
+
+
