@@ -98,41 +98,24 @@ void draw_map() {
 }
 
 void check_available_moves(){
-    int top_el_tower_1 = arr[0][num_of_disks - num_of_disks_on_each_tower[0]];
-    int top_el_tower_2 = arr[1][num_of_disks - num_of_disks_on_each_tower[1]];
-    int top_el_tower_3 = arr[2][num_of_disks - num_of_disks_on_each_tower[2]];
+    int top_el_tower[] = {
+        arr[0][num_of_disks - num_of_disks_on_each_tower[0]],
+        arr[1][num_of_disks - num_of_disks_on_each_tower[1]],
+        arr[2][num_of_disks - num_of_disks_on_each_tower[2]]
+    };
 
     std::cout << "\n";
 
-    // Check moves for Tower 1
-    if ((top_el_tower_1 < top_el_tower_2 || top_el_tower_2 == 0) && top_el_tower_1 != 0) {
-        std::cout << "1) 1 -> 2\n";
-        option[1] = 12;
-    }
-    if ((top_el_tower_1 < top_el_tower_3 || top_el_tower_3 == 0) && top_el_tower_1 != 0) {
-        std::cout << "2) 1 -> 3\n";
-        option[2] = 13;
-    }
+    int arr_index = 1;
 
-    // Check moves for Tower 2
-    if ((top_el_tower_2 < top_el_tower_1 || top_el_tower_1 == 0) && top_el_tower_2 != 0) {
-        std::cout << "3) 2 -> 1\n";
-        option[3] = 21;
-    }
-    if ((top_el_tower_2 < top_el_tower_3 || top_el_tower_3 == 0) && top_el_tower_2 != 0) {
-        std::cout << "4) 2 -> 3\n";
-        option[4] = 23;
-    }
-
-    // Check moves for Tower 3
-    if ((top_el_tower_3 < top_el_tower_1 || top_el_tower_1 == 0) && top_el_tower_3 != 0) {
-        std::cout << "5) 3 -> 1\n";
-        option[5] = 31;
-    }
-    if ((top_el_tower_3 < top_el_tower_2 || top_el_tower_2 == 0) && top_el_tower_3 != 0) {
-        std::cout << "6) 3 -> 2\n";
-        option[6] = 32;
-    }
+    for(int i = 0; i < 3; i++)
+        for(int j =0; j < 3;j++) {
+            if((top_el_tower[i] < top_el_tower[j] || top_el_tower[j] == 0) && top_el_tower[i] != 0){
+                std::cout << arr_index << ") " << i+1 << " -> " << j+1 << std::endl;
+                option[arr_index] = std::stoi(std::to_string(i+1) + std::to_string(j+1));
+                arr_index++;
+            }
+        }
 }
 
 void move_disk(int from, int to, int num_of_disks_tower_from, int num_of_disks_tower_to) {
