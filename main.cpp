@@ -16,24 +16,12 @@ bool win();
 
 const int default_num_of_disks = 3;
 int num_of_disks = default_num_of_disks;
+int moves_counter = 0;
 
 int num_of_disks_on_each_tower[3] = { default_num_of_disks, 0, 0 };
 
 int arr[3][7];
 int option[6];
-
-/*
-int arr[3][7] = {
-    {0, 0, 2, 0, 0, 0 , 0},
-    {0, 0, 0, 0, 0, 0 , 0},  // Doesnt really draw correctly in this case :(
-    {0, 4, 6, 0, 0, 0 , 0}
-};
-
-int arr[3][7] = {
-    {0, 0, 2, 0, 0, 0 , 0},
-    {0, 4, 6, 0, 0, 0 , 0},
-    {0, 0, 0, 0, 0, 0 , 0}
-};*/
 
 int main(int argc, char** argv)
 {
@@ -42,11 +30,13 @@ int main(int argc, char** argv)
     while(!win()) {
         draw_map();
         check_available_moves();
+        std::cout << "\nMoves: " << moves_counter;
         choose_option();
-
     }
+    draw_map();
 
-    std::cout << "\nYeah, congratulations, you WON!\n\n";
+    std::cout << "\n\nYeah, congratulations, you WON!\n"
+              << "Score: " << moves_counter-1 << " moves\n";
 
     return 0;
 }
@@ -116,6 +106,8 @@ void check_available_moves(){
                 arr_index++;
             }
         }
+    std::cout << std::endl << 0 << ") Exit" << std::endl;
+    option[0] = 9; // Exit game
 }
 
 void move_disk(int from, int to, int num_of_disks_tower_from, int num_of_disks_tower_to) {
@@ -123,6 +115,7 @@ void move_disk(int from, int to, int num_of_disks_tower_from, int num_of_disks_t
     arr[from-1][num_of_disks - num_of_disks_tower_from] = 0;
     num_of_disks_on_each_tower[from-1] -= 1;
     num_of_disks_on_each_tower[to-1] += 1;
+    moves_counter++;
 }
 
 void choose_option() {
@@ -137,8 +130,14 @@ void choose_option() {
         }
     } while(std::cin.fail() || key > 10 || (option[key] == 0));
 
+    if(option[key] == 9) {
+        std::cout << "\nHave a nice day :D\n";
+        exit(1);
+    }
+
     int from = option[key] / 10;
     int to = option[key] % 10;
+    std::cout << std::string((num_of_disks*2*3) + 6, '~') << "\n";
     move_disk(from, to, num_of_disks_on_each_tower[from-1], num_of_disks_on_each_tower[to-1]);
     clear_option_arr();
 }
