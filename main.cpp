@@ -45,8 +45,9 @@ void check_args(int arg_count, char *a[]) {
     int arg_content;
     if (arg_count > 1) {
         arg_content = atoi(a[1]);
-        if (*a[1] > default_num_of_disks && *a[1] < 8) {
+        if (arg_content > default_num_of_disks && arg_content < 8) {
             num_of_disks = arg_content;
+            num_of_disks_on_each_tower[0] = num_of_disks;
         }
     }
 }
