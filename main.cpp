@@ -72,32 +72,29 @@ void create_map(int disks_count) {
 }
 
 void draw_map() {
-    int how_many_spaces = num_of_disks;
-    int next;
-    int next_should_have;
+    int longest_disk = num_of_disks*2;
+    int current;
+    int padding;
 
-    std::cout << "\n";
     for(int i = 0; i < num_of_disks; i++) {
-        for(int j = 0;j < num_of_disks; j++) {
-            next = arr[j][i];
-            next_should_have = (i+1)*2;
-            if (next_should_have != next ) {
-                std::cout << std::string((next_should_have-next)/2, ' ');
-            }
-
-            std::cout << std::string(how_many_spaces, ' ');
-
+        std::cout << std::string(2, ' '); // Distance between left frame and first tower
+        for(int j = 0;j < 3; j++) {
+            current = arr[j][i];
+            padding = (longest_disk-current)/2;
+            std::cout << std::string(padding, ' '); // Padding from the left of the disk
             for(int b = 0; b < arr[j][i];b++)
                 std::cout << "#";
-            if (arr[j][i] == 0)     // In case there is no disk at this place
-                std::cout << "\t";
-
-            std::cout << " \t";
-
+            std::cout << std::string(padding, ' '); // Padding from the right of the disk
+            std::cout << std::string(2, ' '); // // Padding between disks
         }
-        how_many_spaces = how_many_spaces != 0 ? how_many_spaces-1 : 0;
         std::cout << std::endl;
     }
+    std::cout << std::string(2, ' ')
+              << std::string(longest_disk, '-')
+              << std::string(2, ' ')
+              << std::string(longest_disk, '-')
+              << std::string(2, ' ')
+              << std::string(longest_disk, '-');
 }
 
 void check_available_moves(){
