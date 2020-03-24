@@ -78,7 +78,7 @@ void draw_map() {
             std::cout << std::string(padding, ' '); // Padding from the right of the disk
             std::cout << std::string(2, ' '); // // Padding between disks
         }
-        std::cout << std::endl;
+        std::cout << "\n";
     }
     std::cout << std::string(2, ' ')
               << std::string(longest_disk, '-')
@@ -102,12 +102,12 @@ void check_available_moves(){
     for(int i = 0; i < 3; i++)
         for(int j =0; j < 3;j++) {
             if((top_el_tower[i] < top_el_tower[j] || top_el_tower[j] == 0) && top_el_tower[i] != 0){
-                std::cout << arr_index << ") " << i+1 << " -> " << j+1 << std::endl;
+                std::cout << arr_index << ") " << i+1 << " -> " << j+1 << "\n";
                 option[arr_index] = std::stoi(std::to_string(i+1) + std::to_string(j+1));
                 arr_index++;
             }
         }
-    std::cout << std::endl << 0 << ") Exit" << std::endl;
+    std::cout << "\n" << 0 << ") Exit\n";
     option[0] = 9; // Exit game
 }
 
