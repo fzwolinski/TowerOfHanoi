@@ -5,26 +5,31 @@
 #include <algorithm>
 #include <limits>
 
+int num_of_disks = 3;
+int moves_counter = 0;
+int num_of_disks_on_each_tower[3] = { num_of_disks, 0, 0 };
+
+/* (Default setting
+    {2, 4, 6, 0, 0, 0, 0} // Tower 1
+    {0, 0, 0, 0, 0, 0, 0} // Tower 2
+    {0, 0, 0, 0, 0, 0, 0} // Tower 3
+*/
+int arr[3][7];
+int move_option[6];
+
 void check_args(int arg_count, char *a[]);
 void create_map(int disks_count);
 void draw_map();
 void check_available_moves();
-void move_disk(int from, int to, int num_of_disks_tower_from, int num_of_disks_tower_to);
+void move_disk(
+        int from, int to,
+        int num_of_disks_tower_from, int num_of_disks_tower_to
+    );
 void choose_option();
 void clear_option_arr();
 bool win();
 
-const int default_num_of_disks = 3;
-int num_of_disks = default_num_of_disks;
-int moves_counter = 0;
-
-int num_of_disks_on_each_tower[3] = { default_num_of_disks, 0, 0 };
-
-int arr[3][7];
-int option[6];
-
-int main(int argc, char** argv)
-{
+int main(int argc, char** argv) {
     check_args(argc, argv);
     create_map(num_of_disks);
     while(!win()) {
@@ -45,7 +50,7 @@ void check_args(int arg_count, char *a[]) {
     int arg_content;
     if (arg_count > 1) {
         arg_content = atoi(a[1]);
-        if (arg_content > default_num_of_disks && arg_content < 8) {
+        if (arg_content > num_of_disks && arg_content < 8) {
             num_of_disks = arg_content;
             num_of_disks_on_each_tower[0] = num_of_disks;
         }
@@ -53,7 +58,9 @@ void check_args(int arg_count, char *a[]) {
 }
 
 void create_map(int disks_count) {
-    int map_val = 2; // the number of blocks for one disk must be even to make the whole structure symmetrical
+    // the number of blocks
+    // for one disk must be even to make the whole structure symmetrical
+    int map_val = 2;
     for(int i = 0; i < num_of_disks; i++){
         for(int j = 0; j < disks_count;j++) {
             arr[i][j] = i == 0 ? map_val : 0;
@@ -80,6 +87,7 @@ void draw_map() {
         }
         std::cout << "\n";
     }
+    // Ground under the towers
     std::cout << std::string(2, ' ')
               << std::string(longest_disk, '-')
               << std::string(2, ' ')
@@ -103,12 +111,12 @@ void check_available_moves(){
         for(int j =0; j < 3;j++) {
             if((top_el_tower[i] < top_el_tower[j] || top_el_tower[j] == 0) && top_el_tower[i] != 0){
                 std::cout << arr_index << ") " << i+1 << " -> " << j+1 << "\n";
-                option[arr_index] = std::stoi(std::to_string(i+1) + std::to_string(j+1));
+                move_option[arr_index] = std::stoi(std::to_string(i+1) + std::to_string(j+1));
                 arr_index++;
             }
         }
     std::cout << "\n" << 0 << ") Exit\n";
-    option[0] = 9; // Exit game
+    move_option[0] = 9; // Exit game
 }
 
 void move_disk(int from, int to, int num_of_disks_tower_from, int num_of_disks_tower_to) {
@@ -129,15 +137,15 @@ void choose_option() {
             std::cin.clear();
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         }
-    } while(std::cin.fail() || key > 10 || (option[key] == 0));
+    } while(std::cin.fail() || key > 10 || (move_option[key] == 0));
 
-    if(option[key] == 9) {
+    if(move_option[key] == 9) {
         std::cout << "\nHave a nice day :D\n";
-        exit(1);
+        exit(0);
     }
 
-    int from = option[key] / 10;
-    int to = option[key] % 10;
+    int from = move_option[key] / 10;
+    int to = move_option[key] % 10;
     std::cout << std::string((num_of_disks*2*3) + 6, '~') << "\n";
     move_disk(from, to, num_of_disks_on_each_tower[from-1], num_of_disks_on_each_tower[to-1]);
     clear_option_arr();
@@ -145,7 +153,7 @@ void choose_option() {
 
 void clear_option_arr() {
     for(int i = 0; i < 7; i++) {
-        option[i] = 0;
+        move_option[i] = 0;
     }
 }
 
@@ -159,4 +167,3 @@ bool win() {
     }
     return win;
 }
-
